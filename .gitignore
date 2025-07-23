@@ -32,5 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 
-### Arquico que contem dados pessoais ###
+### Arquivo que contem dados pessoais ###
 src/main/resources/application.properties
