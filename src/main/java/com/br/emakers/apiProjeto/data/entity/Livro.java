@@ -1,18 +1,24 @@
 package com.br.emakers.apiProjeto.data.entity;
 
 import java.time.LocalDate;
+
+import com.br.emakers.apiProjeto.data.dto.request.LivroRequestDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@NoArgsConstructor
 @Table(name = "livro")
 
 public class Livro {
@@ -28,4 +34,12 @@ public class Livro {
 
     @Column(name = "data_lancamento", nullable = false)
     private LocalDate data_lancamento;
+
+
+    @Builder
+    public Livro(LivroRequestDTO livroRequestDTO) {
+        this.nome = livroRequestDTO.nome();
+        this.autor = livroRequestDTO.autor();
+        this.data_lancamento = livroRequestDTO.data_lancamento();
+    }
 }

@@ -1,6 +1,7 @@
 package com.br.emakers.apiProjeto.data.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 
 @Entity
@@ -18,4 +19,10 @@ public class Emprestimo {
     @JoinColumn(name = "idPessoa")
     private Pessoa pessoa;
 
+
+    @Builder
+    public Emprestimo(Livro livro, Pessoa pessoa) {
+        this.livro = livro;
+        this.pessoa = pessoa;
+    }
 }
