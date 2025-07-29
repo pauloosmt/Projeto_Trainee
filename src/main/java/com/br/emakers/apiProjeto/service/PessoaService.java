@@ -77,7 +77,7 @@ public class PessoaService {
 
     private Pessoa getPessoaEntityById(Long idPessoa) {
 
-        return pessoaRepository.findById(idPessoa).orElseThrow(()-> new RuntimeException("Pessoa não encontrada"));  //Faz a busca pelo id e retorna uma mensagem caso não encontre
+        return pessoaRepository.findById(idPessoa).orElseThrow(()-> new RuntimeException("Pessoa não encontrada!"));  //Faz a busca pelo id e retorna uma mensagem caso não encontre
     }
 
 }
