@@ -47,4 +47,5 @@ public class Pessoa {
         this.email = pessoaRequestDTO.email();
         this.senha = pessoaRequestDTO.senha();
     }
+
 }

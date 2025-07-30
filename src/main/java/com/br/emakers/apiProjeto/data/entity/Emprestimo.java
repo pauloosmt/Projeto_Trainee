@@ -8,9 +8,9 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 
+
 @Entity
 @NoArgsConstructor
-@IdClass(EmprestimoId.class)
 @Table(name = "emprestimo")
 
 public class Emprestimo {
@@ -19,11 +19,11 @@ public class Emprestimo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    
     @ManyToOne
     @JoinColumn(name = "idLivro")
     private Livro livro;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "idPessoa")
     private Pessoa pessoa;

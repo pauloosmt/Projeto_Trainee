@@ -6,7 +6,7 @@ import com.br.emakers.apiProjeto.data.entity.Emprestimo;
 
 public record EmprestimoResponseDTO(
     Long id,
-    String tituloLivro,
+    String nome_livro,
     String nomePessoa,
     LocalDate dataEmprestimo
 ) {
