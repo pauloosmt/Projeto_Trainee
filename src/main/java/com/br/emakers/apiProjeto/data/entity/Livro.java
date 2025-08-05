@@ -35,6 +35,9 @@ public class Livro {
     @Column(name = "data_lancamento", nullable = false)
     private LocalDate data_lancamento;
 
+    @Column (name = "livro_disponivel")
+    private Boolean livro_disponivel = true;
+
 
     @Builder
     public Livro(LivroRequestDTO livroRequestDTO) {

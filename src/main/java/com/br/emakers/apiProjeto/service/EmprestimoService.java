@@ -32,13 +32,21 @@ public EmprestimoResponseDTO emprestarLivroParaUsuarioLogado(EmprestimoRequestDT
 
     Pessoa pessoa = (Pessoa) pessoaRepository.findByEmail(emailUsuario);
 
+    if(!livro.getLivro_disponivel()) {
+        throw new RuntimeException("O livro ja esta emprestado no momento! ");
+    }
+
     Emprestimo emprestimo = Emprestimo.builder()
         .livro(livro)
         .pessoa(pessoa)
         .dataEmprestimo(LocalDate.now())
         .build();
+    
 
     emprestimoRepository.save(emprestimo);
+
+    livro.setLivro_disponivel(false);
+    livroRepository.save(livro);
 
     return new EmprestimoResponseDTO(emprestimo);
 }
