@@ -53,6 +53,16 @@ public class Pessoa implements UserDetails {
         this.email = pessoaRequestDTO.email();
         this.senha = pessoaRequestDTO.senha();
     }
+    
+    @Builder 
+    public Pessoa(PessoaRequestDTO pessoaRequestDTO, String senha) {
+        this.nome = pessoaRequestDTO.nome();
+        this.cpf = pessoaRequestDTO.cpf();
+        this.cep = pessoaRequestDTO.cep();
+        this.email = pessoaRequestDTO.email();
+        this.senha = senha;
+    }
+    
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
