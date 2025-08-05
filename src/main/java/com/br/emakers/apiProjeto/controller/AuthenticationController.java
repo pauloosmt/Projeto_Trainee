@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.emakers.apiProjeto.data.dto.request.AuthenticationDTO;
 import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
+import com.br.emakers.apiProjeto.data.dto.response.AuthenticationResponseDTO;
 import com.br.emakers.apiProjeto.data.entity.Pessoa;
+import com.br.emakers.apiProjeto.infra.security.TokenService;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
 import jakarta.validation.Valid;
@@ -20,6 +22,10 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
+
+    @Autowired
+    private TokenService tokenService;
+
     @Autowired
     private PessoaRepository pessoaRepository;
     @Autowired
@@ -30,7 +36,9 @@ public class AuthenticationController {
         var emailSenha = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
         var auth = this.authMan.authenticate(emailSenha);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.gerarToken((Pessoa) auth.getPrincipal());
+
+        return ResponseEntity.ok(new AuthenticationResponseDTO(token));
     }
 
     @PostMapping("/register")

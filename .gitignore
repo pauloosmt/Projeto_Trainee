@@ -34,3 +34,6 @@ build/
 
 ### Arquivo que contem dados pessoais ###
 src/main/resources/application.properties
+
+### Arquivos de log ###
+src\main\java\com\br\emakers\apiProjeto\infra\security\TokenService.java
