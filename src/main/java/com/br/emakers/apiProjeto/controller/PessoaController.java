@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,12 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.PessoaResponseDTO;
+import com.br.emakers.apiProjeto.repository.PessoaRepository;
 import com.br.emakers.apiProjeto.service.PessoaService;
 
 @RestController
 @RequestMapping("/pessoa")
 
 public class PessoaController {
+
+    @Autowired
+    private PessoaRepository pessoaRepository;
 
     @Autowired
     private PessoaService pessoaService;
@@ -42,7 +47,14 @@ public class PessoaController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<PessoaResponseDTO> createPessoa(@RequestBody PessoaRequestDTO pessoaRequestDTO) { //RequestBody serve para informar que o parametro foi informado no corpo da requisição
-        return ResponseEntity.status(HttpStatus.OK).body(pessoaService.createPessoa(pessoaRequestDTO));
+        
+        if(this.pessoaRepository.findByEmail(pessoaRequestDTO.email()) != null) {
+            return ResponseEntity.badRequest().build(); 
+        }
+
+        String encryptedSenha = new BCryptPasswordEncoder().encode(pessoaRequestDTO.senha());
+        
+        return ResponseEntity.status(HttpStatus.OK).body(pessoaService.createPessoa(pessoaRequestDTO, encryptedSenha));
     }
 
     @PutMapping(value = "/update/{idPessoa}")

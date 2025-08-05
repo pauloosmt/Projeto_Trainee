@@ -33,8 +33,8 @@ public class PessoaService {
     }
 
 
-    public PessoaResponseDTO createPessoa(PessoaRequestDTO pessoaRequestDTO) {
-        Pessoa pessoa = new Pessoa(pessoaRequestDTO);
+    public PessoaResponseDTO createPessoa(PessoaRequestDTO pessoaRequestDTO, String senha) {
+        Pessoa pessoa = new Pessoa(pessoaRequestDTO, senha);
         pessoaRepository.save(pessoa);
 
         return new PessoaResponseDTO(pessoa);
