@@ -13,6 +13,8 @@ import com.br.emakers.apiProjeto.repository.LivroRepository;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -50,5 +52,13 @@ public EmprestimoResponseDTO emprestarLivroParaUsuarioLogado(EmprestimoRequestDT
 
     return new EmprestimoResponseDTO(emprestimo);
 }
+
+public List<EmprestimoResponseDTO> getAllEmprestimos() {
+       List<Emprestimo> emprestimos = emprestimoRepository.findAll();
+        
+       // Converte cada objeto Livro da lista original em um LivroResponseDTO, criando uma nova lista apenas com os dados que serão enviados na resposta da API
+        return emprestimos.stream().map(EmprestimoResponseDTO::new).collect(Collectors.toList()); 
+
+    }
    
 }
