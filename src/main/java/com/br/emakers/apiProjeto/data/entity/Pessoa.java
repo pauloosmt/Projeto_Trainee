@@ -1,5 +1,11 @@
 package com.br.emakers.apiProjeto.data.entity;
 
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
 
 import jakarta.persistence.Column;
@@ -19,7 +25,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Table(name = "pessoa")
 
-public class Pessoa {
+public class Pessoa implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY )
     private Long idPessoa;
@@ -33,7 +39,7 @@ public class Pessoa {
     @Column(name = "cep", nullable = false, length = 9)
     private String cep;
 
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
 
     @Column(name = "senha", nullable = false, length = 100 )
@@ -46,6 +52,21 @@ public class Pessoa {
         this.cep = pessoaRequestDTO.cep();
         this.email = pessoaRequestDTO.email();
         this.senha = pessoaRequestDTO.senha();
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getPassword() {
+       return senha;
+    }
+       
+    @Override
+    public String getUsername() {
+        return email;
     }
 
 }

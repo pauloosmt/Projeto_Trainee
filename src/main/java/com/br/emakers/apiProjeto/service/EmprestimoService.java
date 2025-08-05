@@ -26,12 +26,11 @@ private PessoaRepository pessoaRepository;
 @Autowired
 private EmprestimoRepository emprestimoRepository;
 
-public EmprestimoResponseDTO emprestarLivroParaUsuarioLogado(EmprestimoRequestDTO dto, String emailUsuario) {
-    Livro livro = livroRepository.findByNome(dto.nome_livro())
+public EmprestimoResponseDTO emprestarLivroParaUsuarioLogado(EmprestimoRequestDTO emprestimoRequestDTO,  String emailUsuario) {
+    Livro livro = livroRepository.findByNome(emprestimoRequestDTO.nome_livro())
         .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
 
-    Pessoa pessoa = pessoaRepository.findByEmail(emailUsuario)
-        .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+    Pessoa pessoa = (Pessoa) pessoaRepository.findByEmail(emailUsuario);
 
     Emprestimo emprestimo = Emprestimo.builder()
         .livro(livro)

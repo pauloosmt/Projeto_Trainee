@@ -18,6 +18,8 @@ import com.br.emakers.apiProjeto.data.dto.request.LivroRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.LivroResponseDTO;
 import com.br.emakers.apiProjeto.service.LivroService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/livro")
 
@@ -41,7 +43,7 @@ public class LivroController {
 
     //Criar Livro
     @PostMapping(value = "/create")
-    public ResponseEntity<LivroResponseDTO> createLivro(@RequestBody LivroRequestDTO livroRequestDTO) {
+    public ResponseEntity<LivroResponseDTO> createLivro(@Valid @RequestBody LivroRequestDTO livroRequestDTO) {
         return ResponseEntity.status(HttpStatus.OK).body(livroService.createLivro(livroRequestDTO));            
 
     }
@@ -49,7 +51,7 @@ public class LivroController {
 
     //Atualizar Livro
     @PutMapping(value = "/update/{idLivro}")
-    public ResponseEntity<LivroResponseDTO> updateLivro(@PathVariable Long idLivro, @RequestBody LivroRequestDTO livroRequestDTO ) {
+    public ResponseEntity<LivroResponseDTO> updateLivro(@PathVariable Long idLivro, @Valid @RequestBody LivroRequestDTO livroRequestDTO ) {
         return ResponseEntity.status(HttpStatus.OK).body(livroService.updateLivro(idLivro, livroRequestDTO));
     }
 
