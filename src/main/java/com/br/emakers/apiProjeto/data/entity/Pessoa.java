@@ -45,14 +45,11 @@ public class Pessoa implements UserDetails {
     @Column(name = "senha", nullable = false, length = 100 )
     private String senha;
 
-    @Builder
-    public Pessoa(PessoaRequestDTO pessoaRequestDTO) {
-        this.nome = pessoaRequestDTO.nome();
-        this.cpf = pessoaRequestDTO.cpf();
-        this.cep = pessoaRequestDTO.cep();
-        this.email = pessoaRequestDTO.email();
-        this.senha = pessoaRequestDTO.senha();
-    }
+    private String logradouro;
+    private String bairro;
+    private String localidade;
+    private String uf;
+
     
     @Builder 
     public Pessoa(PessoaRequestDTO pessoaRequestDTO, String senha) {
@@ -78,5 +75,26 @@ public class Pessoa implements UserDetails {
     public String getUsername() {
         return email;
     }
+
+    @Override
+public boolean isEnabled() {
+    return true; // ou sua lógica de habilitação
+}
+
+@Override
+public boolean isCredentialsNonExpired() {
+    return true; // ou sua lógica para credenciais expiradas
+}
+
+@Override
+public boolean isAccountNonExpired() {
+    return true; // ou sua lógica para conta expirada
+}
+
+@Override
+public boolean isAccountNonLocked() {
+    return true; // ou sua lógica para conta bloqueada
+}
+
 
 }

@@ -9,13 +9,22 @@ import org.springframework.stereotype.Service;
 import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.PessoaResponseDTO;
 import com.br.emakers.apiProjeto.data.entity.Pessoa;
+import com.br.emakers.apiProjeto.feign.PessoaFeign;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class PessoaService {
 
     @Autowired
+    private PessoaFeign pessoaFeign;
+
+    @Autowired
     private PessoaRepository pessoaRepository;
+
+    
 
     public List<PessoaResponseDTO> getAllPessoas() {
        List<Pessoa> pessoas = pessoaRepository.findAll();
@@ -34,7 +43,15 @@ public class PessoaService {
 
 
     public PessoaResponseDTO createPessoa(PessoaRequestDTO pessoaRequestDTO, String senha) {
+
+        PessoaResponseDTO endereco = pessoaFeign.buscaEnderecoCEP(pessoaRequestDTO.cep()); //Pegando o endereço através do cep, utilizando API externa
         Pessoa pessoa = new Pessoa(pessoaRequestDTO, senha);
+
+        pessoa.setLogradouro(endereco.logradouro());
+        pessoa.setBairro(endereco.bairro());
+        pessoa.setLocalidade(endereco.localidade());
+        pessoa.setUf(endereco.uf());
+
         pessoaRepository.save(pessoa);
 
         return new PessoaResponseDTO(pessoa);
@@ -79,6 +96,8 @@ public class PessoaService {
 
         return pessoaRepository.findById(idPessoa).orElseThrow(()-> new RuntimeException("Pessoa não encontrada!"));  //Faz a busca pelo id e retorna uma mensagem caso não encontre
     }
+
+    
 
 }
 
