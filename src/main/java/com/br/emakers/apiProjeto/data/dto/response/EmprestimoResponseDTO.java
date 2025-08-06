@@ -8,14 +8,16 @@ public record EmprestimoResponseDTO(
     Long id,
     String nome_livro,
     String nomePessoa,
-    LocalDate dataEmprestimo
+    LocalDate dataEmprestimo,
+    LocalDate dataDevolucao
 ) {
     public EmprestimoResponseDTO(Emprestimo emprestimo) {
         this(
             emprestimo.getId(),
             emprestimo.getLivro().getNome(),
             emprestimo.getPessoa().getNome(),
-            emprestimo.getDataEmprestimo()
+            emprestimo.getDataEmprestimo(),
+            emprestimo.getDataDevolucao()
         );
     }
 }

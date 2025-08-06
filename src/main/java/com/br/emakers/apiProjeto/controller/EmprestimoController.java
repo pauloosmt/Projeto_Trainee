@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,6 +45,13 @@ public class EmprestimoController {
         // - o corpo da resposta será a lista de pessoas (em formato JSON)
         return ResponseEntity.status(HttpStatus.OK).body(emprestimoService.getAllEmprestimos());
     }
+
+    @PutMapping("/return/{idEmprestimo}")
+    public ResponseEntity<EmprestimoResponseDTO> devolverEmprestimo(@PathVariable Long idEmprestimo) {
+        EmprestimoResponseDTO emprestimoResponseDTO = emprestimoService.devolverLivro(idEmprestimo);
+        return ResponseEntity.ok(emprestimoResponseDTO);
+    }
+
 
 
 }

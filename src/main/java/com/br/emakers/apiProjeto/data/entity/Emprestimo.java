@@ -5,10 +5,13 @@ import java.time.LocalDate;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
-
+@Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @Table(name = "emprestimo")
@@ -30,23 +33,14 @@ public class Emprestimo {
 
     private LocalDate dataEmprestimo;
 
-    public Long getId() {
-        return id;
-    }
-    public Livro getLivro() { 
-        return livro; 
-    }
-    public Pessoa getPessoa() { 
-        return pessoa; 
-    }
-    public LocalDate getDataEmprestimo() { 
-        return dataEmprestimo; 
-    }
+    private LocalDate dataDevolucao;
+
 
     @Builder
-    public Emprestimo(Livro livro, Pessoa pessoa, LocalDate dataEmprestimo) {
+    public Emprestimo(Livro livro, Pessoa pessoa, LocalDate dataEmprestimo, LocalDate dataDevolucao) {
         this.livro = livro;
         this.pessoa = pessoa;
         this.dataEmprestimo = dataEmprestimo;
+        this.dataDevolucao = dataDevolucao;
     }
 }

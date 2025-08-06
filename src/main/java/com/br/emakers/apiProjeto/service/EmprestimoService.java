@@ -12,12 +12,15 @@ import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
 import com.br.emakers.apiProjeto.repository.LivroRepository;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
+import jakarta.transaction.Transactional;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 
 @Service
+@Transactional
 public class EmprestimoService {
 @Autowired
 private LivroRepository livroRepository;
@@ -60,5 +63,27 @@ public List<EmprestimoResponseDTO> getAllEmprestimos() {
         return emprestimos.stream().map(EmprestimoResponseDTO::new).collect(Collectors.toList()); 
 
     }
+
+public EmprestimoResponseDTO devolverLivro(Long id) {
+    Emprestimo emprestimo = emprestimoRepository.findById(id)
+    .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+
+    Livro livro = emprestimo.getLivro();
+
+    if (emprestimo.getDataDevolucao() != null) {
+        throw new RuntimeException("Este empréstimo já foi devolvido.");
+    }
+
+    livro.setLivro_disponivel(true);
+
+    emprestimo.setDataDevolucao(LocalDate.now());
+
+    livroRepository.save(livro);
+    emprestimoRepository.save(emprestimo);
+
+    return new EmprestimoResponseDTO(emprestimo);
+    
+
+}
    
 }
