@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
@@ -64,7 +65,12 @@ public class PessoaService {
         }
         
         if(pessoaRequestDTO.cep() != null) {
+            PessoaResponseDTO endereco = pessoaFeign.buscaEnderecoCEP(pessoaRequestDTO.cep());
             pessoa.setCep(pessoaRequestDTO.cep());
+            pessoa.setLogradouro(endereco.logradouro());
+            pessoa.setBairro(endereco.bairro());
+            pessoa.setLocalidade(endereco.localidade());
+            pessoa.setUf(endereco.uf());
         }
 
         if(pessoaRequestDTO.cpf() != null) {
@@ -76,7 +82,8 @@ public class PessoaService {
         }
 
         if(pessoaRequestDTO.senha() != null) {
-            pessoa.setSenha(pessoaRequestDTO.senha());
+            String encryptedSenha = new BCryptPasswordEncoder().encode(pessoaRequestDTO.senha());
+            pessoa.setSenha(encryptedSenha);
         }
 
         pessoaRepository.save(pessoa);

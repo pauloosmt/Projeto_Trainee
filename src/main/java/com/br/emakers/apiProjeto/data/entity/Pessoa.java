@@ -78,22 +78,22 @@ public class Pessoa implements UserDetails {
 
     @Override
 public boolean isEnabled() {
-    return true; // ou sua lógica de habilitação
+    return true; 
 }
 
 @Override
 public boolean isCredentialsNonExpired() {
-    return true; // ou sua lógica para credenciais expiradas
+    return true; 
 }
 
 @Override
 public boolean isAccountNonExpired() {
-    return true; // ou sua lógica para conta expirada
+    return true; 
 }
 
 @Override
 public boolean isAccountNonLocked() {
-    return true; // ou sua lógica para conta bloqueada
+    return true; 
 }
 
 
