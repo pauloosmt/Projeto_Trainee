@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.PessoaResponseDTO;
+import com.br.emakers.apiProjeto.data.entity.Pessoa;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 import com.br.emakers.apiProjeto.service.PessoaService;
 
@@ -40,7 +41,7 @@ public class PessoaController {
     }
 
     @GetMapping(value = "/{idPessoa}")
-    public ResponseEntity<PessoaResponseDTO> getPessoaById(@PathVariable Long idPessoa) { //PathVariable serve para indicar que o idPessoa que esta sendo passado como parametro é o mesmo do GetMapping
+    public ResponseEntity<Pessoa> getPessoaById(@PathVariable Long idPessoa)  { //PathVariable serve para indicar que o idPessoa que esta sendo passado como parametro é o mesmo do GetMapping
         return ResponseEntity.status(HttpStatus.OK).body(pessoaService.getPessoabyId(idPessoa));
 
     }

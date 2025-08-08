@@ -35,7 +35,7 @@ public class LivroController {
     }
 
     //Buscar Livro por id
-    @GetMapping(value = "{idLivro}")
+    @GetMapping(value = "/{idLivro}")
     public ResponseEntity<LivroResponseDTO> getLivroById(@PathVariable  Long idLivro){
         return ResponseEntity.status(HttpStatus.OK).body(livroService.getLivrobyId(idLivro));
 
