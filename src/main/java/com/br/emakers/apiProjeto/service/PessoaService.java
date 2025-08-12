@@ -11,6 +11,7 @@ import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.PessoaResponseDTO;
 import com.br.emakers.apiProjeto.data.entity.Pessoa;
 import com.br.emakers.apiProjeto.feign.PessoaFeign;
+import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
 import com.br.emakers.apiProjeto.exceptions.general.EntidadeNaoEncontrada;
@@ -25,6 +26,9 @@ public class PessoaService {
 
     @Autowired
     private PessoaRepository pessoaRepository;
+
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
 
     
 
@@ -95,6 +99,8 @@ public class PessoaService {
 
     public String deletePessoa(Long idPessoa) {
         Pessoa pessoa = getPessoaEntityById(idPessoa);
+        // Primeiro apaga os empréstimos da pessoa
+        emprestimoRepository.deleteById(idPessoa);
         pessoaRepository.delete(pessoa);
 
         return "A pessoa: '" + pessoa.getNome() + "' foi deletada!";  

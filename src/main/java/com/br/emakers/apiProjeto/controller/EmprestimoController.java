@@ -52,6 +52,11 @@ public class EmprestimoController {
         return ResponseEntity.ok(emprestimoResponseDTO);
     }
 
+    @GetMapping("/{idEmprestimo}")
+    public ResponseEntity<EmprestimoResponseDTO> buscarEmprestimoID(@PathVariable Long idEmprestimo) {
+        EmprestimoResponseDTO emprestimoResponseDTO = emprestimoService.procurarPeloId(idEmprestimo);
+        return ResponseEntity.ok(emprestimoResponseDTO);
+    }
 
 
 }

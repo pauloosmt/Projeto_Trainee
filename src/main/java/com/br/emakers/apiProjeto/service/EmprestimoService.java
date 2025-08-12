@@ -85,5 +85,12 @@ public EmprestimoResponseDTO devolverLivro(Long id) {
     
 
 }
+
+public EmprestimoResponseDTO procurarPeloId(Long id) {
+    Emprestimo emprestimo = emprestimoRepository.findById(id)
+    .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+    return new EmprestimoResponseDTO(emprestimo);
+
+}
    
 }
