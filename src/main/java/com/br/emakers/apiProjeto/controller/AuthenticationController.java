@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import com.br.emakers.apiProjeto.data.dto.request.AuthenticationDTO;
 import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.AuthenticationResponseDTO;
@@ -31,14 +32,15 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authMan; //Acessa atraves do SecurityConfiguration
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
-         System.out.println("Tentando login com: " + data.email());
-        var emailSenha = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
-        var auth = this.authMan.authenticate(emailSenha);
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {   
+             System.out.println("Tentando login com: " + data.email());
+            var emailSenha = new UsernamePasswordAuthenticationToken(data.email(), data.senha());
+            var auth = this.authMan.authenticate(emailSenha);
 
-        var token = tokenService.gerarToken((Pessoa) auth.getPrincipal());
+            var token = tokenService.gerarToken((Pessoa) auth.getPrincipal());
 
-        return ResponseEntity.ok(new AuthenticationResponseDTO(token));
+            return ResponseEntity.ok(new AuthenticationResponseDTO(token));
+
     }
 
     @PostMapping("/register")

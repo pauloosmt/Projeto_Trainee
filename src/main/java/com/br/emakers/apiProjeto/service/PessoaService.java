@@ -13,7 +13,7 @@ import com.br.emakers.apiProjeto.data.entity.Pessoa;
 import com.br.emakers.apiProjeto.feign.PessoaFeign;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
-import com.br.emakers.apiProjeto.exceptions.general.EntityNotFoundException;
+import com.br.emakers.apiProjeto.exceptions.general.EntidadeNaoEncontrada;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -40,7 +40,7 @@ public class PessoaService {
     public Pessoa getPessoabyId(Long idPessoa) {
     
 
-        return pessoaRepository.findById(idPessoa).orElseThrow(() -> new EntityNotFoundException(idPessoa));
+        return pessoaRepository.findById(idPessoa).orElseThrow(() -> new EntidadeNaoEncontrada(idPessoa));
     }
 
 
@@ -102,7 +102,7 @@ public class PessoaService {
 
     private Pessoa getPessoaEntityById(Long idPessoa) {
 
-        return pessoaRepository.findById(idPessoa).orElseThrow(()-> new EntityNotFoundException(idPessoa));  //Faz a busca pelo id e retorna uma mensagem caso não encontre
+        return pessoaRepository.findById(idPessoa).orElseThrow(()-> new EntidadeNaoEncontrada(idPessoa));  //Faz a busca pelo id e retorna uma mensagem caso não encontre
     }
 
     
