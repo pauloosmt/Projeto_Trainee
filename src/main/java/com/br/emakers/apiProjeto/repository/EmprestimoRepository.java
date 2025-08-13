@@ -12,4 +12,7 @@ public interface EmprestimoRepository extends JpaRepository<Emprestimo, Long> {
     List<Emprestimo> findByPessoaEmail(String email);
     @Query("SELECT e FROM Emprestimo e WHERE e.livro.idLivro = :idLivro")
     List<Emprestimo> findByLivroId(@Param("idLivro") Long idLivro);
+    
+    @Query("SELECT e FROM Emprestimo e WHERE e.pessoa.idPessoa = :idPessoa")
+    List<Emprestimo> findByPessoaId(@Param("idPessoa") Long idPessoa);
 }

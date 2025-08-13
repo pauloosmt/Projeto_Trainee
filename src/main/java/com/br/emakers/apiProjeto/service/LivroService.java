@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 
 import com.br.emakers.apiProjeto.data.dto.request.LivroRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.LivroResponseDTO;
+import com.br.emakers.apiProjeto.data.entity.Emprestimo;
 import com.br.emakers.apiProjeto.data.entity.Livro;
+import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
 import com.br.emakers.apiProjeto.repository.LivroRepository;
 
 @Service
@@ -16,6 +18,8 @@ public class LivroService {
 
     @Autowired
     private LivroRepository livroRepository;
+    @Autowired
+    private EmprestimoRepository emprestimoRepository;
 
     public List<LivroResponseDTO> getAllLivro() {
        List<Livro> livros = livroRepository.findAll();
@@ -59,10 +63,20 @@ public class LivroService {
     }
 
     public String deleteLivro(Long idLivro, LivroRequestDTO livroRequestDTO) {
-        Livro livro = getLivroEntityById(idLivro);
-        livroRepository.delete(livro);
 
-        return "O livro: '" + livro.getNome() + "' foi deletado!";  
+        Livro livro = getLivroEntityById(idLivro);
+        List<Emprestimo> emprestimos = emprestimoRepository.findByLivroId(idLivro);
+        boolean temEmprestimoPendente = emprestimos.stream()
+        .anyMatch(e -> e.getDataDevolucao() == null);
+
+        if (temEmprestimoPendente) {
+            throw new IllegalStateException("Não é possível deletar: existem empréstimos pendentes para este livro.");
+        }
+        else {
+            emprestimoRepository.deleteAll(emprestimos);
+            livroRepository.delete(livro);
+            return "O livro: '" + livro.getNome() + "' foi deletado!";  
+        }
     }
 
     private Livro getLivroEntityById(Long idLivro) {

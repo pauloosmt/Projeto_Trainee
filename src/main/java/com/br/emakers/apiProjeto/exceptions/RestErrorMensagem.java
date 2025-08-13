@@ -4,12 +4,12 @@ import java.util.Date;
 
 import org.springframework.http.HttpStatus;
 
-public record RestErrorMenssagem(
+public record RestErrorMensagem(
     HttpStatus status,
     String message,
     Date timestamp
 ) {
-    public RestErrorMenssagem(HttpStatus status, String message) {
+    public RestErrorMensagem(HttpStatus status, String message) {
         this(status, message, new Date());
     }
 }

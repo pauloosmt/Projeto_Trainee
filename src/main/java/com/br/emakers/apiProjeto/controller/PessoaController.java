@@ -21,6 +21,10 @@ import com.br.emakers.apiProjeto.data.entity.Pessoa;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 import com.br.emakers.apiProjeto.service.PessoaService;
 
+import jakarta.validation.Valid;
+
+
+
 @RestController
 @RequestMapping("/pessoa")
 
@@ -47,7 +51,7 @@ public class PessoaController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<PessoaResponseDTO> createPessoa(@RequestBody PessoaRequestDTO pessoaRequestDTO) { //RequestBody serve para informar que o parametro foi informado no corpo da requisição
+    public ResponseEntity<PessoaResponseDTO> createPessoa(@Valid @RequestBody PessoaRequestDTO pessoaRequestDTO) { //RequestBody serve para informar que o parametro foi informado no corpo da requisição
         
         if(this.pessoaRepository.findByEmail(pessoaRequestDTO.email()) != null) {
             return ResponseEntity.badRequest().build(); 
@@ -65,7 +69,7 @@ public class PessoaController {
 
     @DeleteMapping(value = "/delete/{idPessoa}")
     public ResponseEntity<String> deletePessoa(@PathVariable Long idPessoa) {
-         return ResponseEntity.status(HttpStatus.OK).body(pessoaService.deletePessoa(idPessoa));
+        String msg = pessoaService.deletePessoa(idPessoa);
+        return ResponseEntity.ok(msg);
     }
-    
 }

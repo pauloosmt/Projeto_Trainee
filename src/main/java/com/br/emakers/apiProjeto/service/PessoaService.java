@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.PessoaResponseDTO;
+import com.br.emakers.apiProjeto.data.entity.Emprestimo;
 import com.br.emakers.apiProjeto.data.entity.Pessoa;
 import com.br.emakers.apiProjeto.feign.PessoaFeign;
 import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
@@ -49,7 +50,11 @@ public class PessoaService {
 
 
     public PessoaResponseDTO createPessoa(PessoaRequestDTO pessoaRequestDTO, String senha) {
-
+        if (pessoaRepository.findByEmail(pessoaRequestDTO.email()) != null) {
+            throw new IllegalArgumentException("O email informado já está cadastrado.");
+        }
+        else {
+            
         PessoaResponseDTO endereco = pessoaFeign.buscaEnderecoCEP(pessoaRequestDTO.cep()); //Pegando o endereço através do cep, utilizando API externa
         Pessoa pessoa = new Pessoa(pessoaRequestDTO, senha);
 
@@ -61,6 +66,7 @@ public class PessoaService {
         pessoaRepository.save(pessoa);
 
         return new PessoaResponseDTO(pessoa);
+        }
     }
 
     public PessoaResponseDTO updatePessoa(Long idPessoa, PessoaRequestDTO pessoaRequestDTO) {
@@ -100,10 +106,18 @@ public class PessoaService {
     public String deletePessoa(Long idPessoa) {
         Pessoa pessoa = getPessoaEntityById(idPessoa);
         // Primeiro apaga os empréstimos da pessoa
-        emprestimoRepository.deleteById(idPessoa);
-        pessoaRepository.delete(pessoa);
+        List<Emprestimo> emprestimos = emprestimoRepository.findByPessoaId(idPessoa);
+        boolean temEmprestimoPendente = emprestimos.stream()
+                .anyMatch(e -> e.getDataDevolucao() == null);
+        if(temEmprestimoPendente) {
+             throw new IllegalStateException("Não é possível deletar: existem empréstimos pendentes.");
+        }
+        else {
+            emprestimoRepository.deleteAll(emprestimos);
+            pessoaRepository.delete(pessoa);
 
         return "A pessoa: '" + pessoa.getNome() + "' foi deletada!";  
+        }
     }
 
     private Pessoa getPessoaEntityById(Long idPessoa) {
