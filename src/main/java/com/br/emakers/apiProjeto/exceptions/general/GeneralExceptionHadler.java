@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.br.emakers.apiProjeto.exceptions.RestErrorMensagem;
+import com.br.emakers.apiProjeto.exceptions.entity.EmailCadastradoException;
+import com.br.emakers.apiProjeto.exceptions.entity.EmprestimoDevolvido;
+import com.br.emakers.apiProjeto.exceptions.entity.LivroIndisponivelException;
 import com.br.emakers.apiProjeto.infra.security.SecurityCustomException;
 
 
@@ -27,20 +30,20 @@ public class GeneralExceptionHadler {
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<RestErrorMensagem> handleIllegalState(IllegalStateException ex) {
-        RestErrorMensagem errorMensagem = new RestErrorMensagem((HttpStatus.CONFLICT), ex.getMessage());
+    public ResponseEntity<RestErrorMensagem> handleIllegalState(IllegalStateException excessao) {
+        RestErrorMensagem errorMensagem = new RestErrorMensagem((HttpStatus.CONFLICT), excessao.getMessage());
         return ResponseEntity.status(errorMensagem.status()).body(errorMensagem);
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<RestErrorMensagem> handleAuthException(AuthenticationException ex) {
+    public ResponseEntity<RestErrorMensagem> handleAuthException(AuthenticationException excessao) {
         RestErrorMensagem errorMensagem = new RestErrorMensagem(HttpStatus.UNAUTHORIZED, "Email ou Senha inválidos!");
         return ResponseEntity.status(errorMensagem.status()).body(errorMensagem);
     }
 
     @ExceptionHandler(SecurityCustomException.class)
-    public ResponseEntity<String> handleSecurityException(SecurityCustomException ex) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
+    public ResponseEntity<String> handleSecurityException(SecurityCustomException excessao) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(excessao.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -59,9 +62,27 @@ public class GeneralExceptionHadler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<RestErrorMensagem> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        String mensagem = "O email informado já está cadastrado.";
-        RestErrorMensagem erro = new RestErrorMensagem(HttpStatus.BAD_REQUEST, mensagem);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+    public ResponseEntity<RestErrorMensagem> handleEmailjaUtilizado(DataIntegrityViolationException ex) {
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.BAD_REQUEST, "O email já está cadastrado!");
+        return ResponseEntity.status(error.status()).body(error);
     }
+
+    @ExceptionHandler(LivroIndisponivelException.class)
+    public ResponseEntity<RestErrorMensagem> handleLivroJaEmprestado(LivroIndisponivelException excessao) {
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.BAD_REQUEST, excessao.getMessage());
+        return ResponseEntity.status(error.status()).body(error);
+    }
+
+    @ExceptionHandler(EmprestimoDevolvido.class)
+    public ResponseEntity<RestErrorMensagem> handleEmprestimoDevolvido(EmprestimoDevolvido excessao) {
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.BAD_REQUEST, excessao.getMessage());
+        return ResponseEntity.status(error.status()).body(error);
+    }
+
+    @ExceptionHandler(LivroNaoEncontrado.class)
+    public ResponseEntity<RestErrorMensagem> handleLivroNaoEncontrado(LivroNaoEncontrado excessao) {
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.BAD_REQUEST, excessao.getMessage());
+        return ResponseEntity.status(error.status()).body(error);
+    }
+
 }

@@ -15,6 +15,9 @@ import com.br.emakers.apiProjeto.feign.PessoaFeign;
 import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
+import jakarta.validation.constraints.Email;
+
+import com.br.emakers.apiProjeto.exceptions.entity.EmailCadastradoException;
 import com.br.emakers.apiProjeto.exceptions.general.EntidadeNaoEncontrada;
 import lombok.RequiredArgsConstructor;
 
@@ -50,11 +53,8 @@ public class PessoaService {
 
 
     public PessoaResponseDTO createPessoa(PessoaRequestDTO pessoaRequestDTO, String senha) {
-        if (pessoaRepository.findByEmail(pessoaRequestDTO.email()) != null) {
-            throw new IllegalArgumentException("O email informado já está cadastrado.");
-        }
-        else {
-            
+       
+    
         PessoaResponseDTO endereco = pessoaFeign.buscaEnderecoCEP(pessoaRequestDTO.cep()); //Pegando o endereço através do cep, utilizando API externa
         Pessoa pessoa = new Pessoa(pessoaRequestDTO, senha);
 
@@ -66,7 +66,7 @@ public class PessoaService {
         pessoaRepository.save(pessoa);
 
         return new PessoaResponseDTO(pessoa);
-        }
+        
     }
 
     public PessoaResponseDTO updatePessoa(Long idPessoa, PessoaRequestDTO pessoaRequestDTO) {

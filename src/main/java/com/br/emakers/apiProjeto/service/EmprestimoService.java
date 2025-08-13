@@ -8,6 +8,10 @@ import com.br.emakers.apiProjeto.data.dto.response.EmprestimoResponseDTO;
 import com.br.emakers.apiProjeto.data.entity.Emprestimo;
 import com.br.emakers.apiProjeto.data.entity.Livro;
 import com.br.emakers.apiProjeto.data.entity.Pessoa;
+import com.br.emakers.apiProjeto.exceptions.entity.EmprestimoDevolvido;
+import com.br.emakers.apiProjeto.exceptions.entity.LivroIndisponivelException;
+import com.br.emakers.apiProjeto.exceptions.general.EntidadeNaoEncontrada;
+import com.br.emakers.apiProjeto.exceptions.general.LivroNaoEncontrado;
 import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
 import com.br.emakers.apiProjeto.repository.LivroRepository;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
@@ -38,7 +42,7 @@ public EmprestimoResponseDTO emprestarLivroParaUsuarioLogado(EmprestimoRequestDT
     Pessoa pessoa = (Pessoa) pessoaRepository.findByEmail(emailUsuario);
 
     if(!livro.getLivro_disponivel()) {
-        throw new RuntimeException("O livro ja esta emprestado no momento! ");
+        throw new LivroIndisponivelException();
     }
 
     Emprestimo emprestimo = Emprestimo.builder()
@@ -66,12 +70,12 @@ public List<EmprestimoResponseDTO> getAllEmprestimos() {
 
 public EmprestimoResponseDTO devolverLivro(Long id) {
     Emprestimo emprestimo = emprestimoRepository.findById(id)
-    .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+    .orElseThrow(() -> new EntidadeNaoEncontrada(id));
 
     Livro livro = emprestimo.getLivro();
 
     if (emprestimo.getDataDevolucao() != null) {
-        throw new RuntimeException("Este empréstimo já foi devolvido.");
+        throw new EmprestimoDevolvido();
     }
 
     livro.setLivro_disponivel(true);
@@ -88,7 +92,7 @@ public EmprestimoResponseDTO devolverLivro(Long id) {
 
 public EmprestimoResponseDTO procurarPeloId(Long id) {
     Emprestimo emprestimo = emprestimoRepository.findById(id)
-    .orElseThrow(() -> new RuntimeException("Empréstimo não encontrado"));
+    .orElseThrow(() -> new EntidadeNaoEncontrada(id));
     return new EmprestimoResponseDTO(emprestimo);
 
 }
