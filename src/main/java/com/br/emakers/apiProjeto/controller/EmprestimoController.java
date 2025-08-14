@@ -34,9 +34,9 @@ public class EmprestimoController {
     @Operation(summary = "Solicitar um empréstimo", description = "Cria um empréstimo para o usuário pelo nome do livro")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Empréstimo criado"),
-        @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
+        @ApiResponse(responseCode = "400", description = "Livro não encontrado"),
         @ApiResponse(responseCode = "403", description =  "Usuario não autenticado"),
-        
+        @ApiResponse(responseCode = "409", description =  "Livro indisponível"),
     })
     @PostMapping("/create")
     
@@ -50,6 +50,11 @@ public class EmprestimoController {
 
     }
 
+    @Operation(summary = "Listar todos os empréstimos", description = "Lista todos os empréstimos")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Listados todos os empréstimos"),
+        @ApiResponse(responseCode = "403", description =  "Usuario não autenticado")
+    })
     @GetMapping("/all")
     public ResponseEntity<List<EmprestimoResponseDTO>> getAllEmprestimos() {
         // Retorna a resposta HTTP com:
@@ -58,12 +63,27 @@ public class EmprestimoController {
         return ResponseEntity.status(HttpStatus.OK).body(emprestimoService.getAllEmprestimos());
     }
 
+
+    @Operation(summary = "Devolver um livro", description = "Devolve um livro que estava emprestado")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Livro Devolvido"),
+        @ApiResponse(responseCode = "400", description = "Empréstimo não encontrado"),
+        @ApiResponse(responseCode = "403", description =  "Usuario não autenticado"),
+        @ApiResponse(responseCode = "409", description =  "Livro já havia sido devolvido"),
+    })
     @PutMapping("/return/{idEmprestimo}")
     public ResponseEntity<EmprestimoResponseDTO> devolverEmprestimo(@PathVariable Long idEmprestimo) {
         EmprestimoResponseDTO emprestimoResponseDTO = emprestimoService.devolverLivro(idEmprestimo);
         return ResponseEntity.ok(emprestimoResponseDTO);
     }
 
+    @Operation(summary = "Listar um empréstimo", description = "Lista um empréstimo pelo ID")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Empréstimo criado"),
+        @ApiResponse(responseCode = "400", description = "Livro não encontrado"),
+        @ApiResponse(responseCode = "403", description =  "Usuario não autenticado"),
+        @ApiResponse(responseCode = "409", description =  "Livro indisponível"),
+    })
     @GetMapping("/{idEmprestimo}")
     public ResponseEntity<EmprestimoResponseDTO> buscarEmprestimoID(@PathVariable Long idEmprestimo) {
         EmprestimoResponseDTO emprestimoResponseDTO = emprestimoService.procurarPeloId(idEmprestimo);

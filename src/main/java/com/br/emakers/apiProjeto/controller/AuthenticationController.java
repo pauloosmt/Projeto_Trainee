@@ -18,10 +18,15 @@ import com.br.emakers.apiProjeto.data.entity.Pessoa;
 import com.br.emakers.apiProjeto.infra.security.TokenService;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
+@Tag(name = "Autenticação", description = "Página de autenticação e registro de usuários")
 public class AuthenticationController {
 
     @Autowired
@@ -31,6 +36,12 @@ public class AuthenticationController {
     private PessoaRepository pessoaRepository;
     @Autowired
     private AuthenticationManager authMan; //Acessa atraves do SecurityConfiguration
+
+    @Operation(summary = "Login" , description = "Fazer login em uma conta cadastrada")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Login Concluído"),
+        @ApiResponse(responseCode = "400", description = "Credenciais incorretas")
+    })
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {   
              System.out.println("Tentando login com: " + data.email());
@@ -43,8 +54,12 @@ public class AuthenticationController {
 
     }
 
+    @Operation(summary = "Registrar" , description = "Registrar uma nova pessoa")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Usuário cadastrado com sucesso"),
+        @ApiResponse(responseCode = "400", description = "Dados Inválidos")
+    })
     @PostMapping("/register")
-
     public ResponseEntity registro(@RequestBody @Valid PessoaRequestDTO pessoaRequestDTO) {
         if(this.pessoaRepository.findByEmail(pessoaRequestDTO.email()) != null) {
             return ResponseEntity.badRequest().build(); 

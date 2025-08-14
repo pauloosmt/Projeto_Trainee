@@ -68,13 +68,13 @@ public class GeneralExceptionHadler {
 
     @ExceptionHandler(LivroIndisponivelException.class)
     public ResponseEntity<RestErrorMensagem> handleLivroJaEmprestado(LivroIndisponivelException excessao) {
-        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.BAD_REQUEST, excessao.getMessage());
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.CONFLICT, excessao.getMessage());
         return ResponseEntity.status(error.status()).body(error);
     }
 
     @ExceptionHandler(EmprestimoDevolvido.class)
     public ResponseEntity<RestErrorMensagem> handleEmprestimoDevolvido(EmprestimoDevolvido excessao) {
-        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.BAD_REQUEST, excessao.getMessage());
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.CONFLICT, excessao.getMessage());
         return ResponseEntity.status(error.status()).body(error);
     }
 
