@@ -33,7 +33,7 @@ public class Pessoa implements UserDetails {
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @Column (name = "cpf", nullable = false, length = 11)
+    @Column (name = "cpf", nullable = false, length = 11, unique = true)
     private String cpf;
 
     @Column(name = "cep", nullable = false, length = 9)

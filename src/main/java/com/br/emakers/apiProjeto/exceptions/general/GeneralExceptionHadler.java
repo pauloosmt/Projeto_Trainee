@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.br.emakers.apiProjeto.exceptions.RestErrorMensagem;
-import com.br.emakers.apiProjeto.exceptions.entity.EmailCadastradoException;
 import com.br.emakers.apiProjeto.exceptions.entity.EmprestimoDevolvido;
 import com.br.emakers.apiProjeto.exceptions.entity.LivroIndisponivelException;
 import com.br.emakers.apiProjeto.infra.security.SecurityCustomException;
@@ -79,10 +78,5 @@ public class GeneralExceptionHadler {
         return ResponseEntity.status(error.status()).body(error);
     }
 
-    @ExceptionHandler(LivroNaoEncontrado.class)
-    public ResponseEntity<RestErrorMensagem> handleLivroNaoEncontrado(LivroNaoEncontrado excessao) {
-        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.BAD_REQUEST, excessao.getMessage());
-        return ResponseEntity.status(error.status()).body(error);
-    }
 
 }

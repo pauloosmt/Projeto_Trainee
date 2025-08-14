@@ -15,9 +15,7 @@ import com.br.emakers.apiProjeto.feign.PessoaFeign;
 import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
-import jakarta.validation.constraints.Email;
 
-import com.br.emakers.apiProjeto.exceptions.entity.EmailCadastradoException;
 import com.br.emakers.apiProjeto.exceptions.general.EntidadeNaoEncontrada;
 import lombok.RequiredArgsConstructor;
 

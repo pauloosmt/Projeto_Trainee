@@ -18,7 +18,7 @@ public record PessoaRequestDTO(
 
     
     @NotBlank(message = "O CEP é obrigatório")
-    @Pattern(regexp = "\\d{5}-?\\d{3}", message = "CEP inválido") //"d{5}-?\\d{3}" serve para aceitar cep com ou sem o traço("12345-000" "12345000")
+    @Pattern(regexp = "\\d{8}", message = "CEP inválido") //"d{5}-?\\d{3}" serve para aceitar cep com ou sem o traço("12345-000" "12345000")
     String cep,
 
     
