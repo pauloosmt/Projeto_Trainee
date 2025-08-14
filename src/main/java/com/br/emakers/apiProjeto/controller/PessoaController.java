@@ -43,7 +43,6 @@ public class PessoaController {
     @Operation(summary = "Listar todas as pessoas", description = "Lista todas as pessoas ")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Todas as pessoa cadastradas"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos"),
         @ApiResponse(responseCode = "403", description =  "Usuario não autenticado"),
         
     })
@@ -55,9 +54,9 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.OK).body(pessoaService.getAllPessoas());
     }
 
-    @Operation(summary = "Listar uma nova pessoa", description = "Lista uma pessoa pelo seu Id")
+    @Operation(summary = "Fornecer uma pessoa pelo ID", description = "Lista uma pessoa pelo seu ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "Retorna a pessoa do Id"),
+        @ApiResponse(responseCode = "200", description = "Retorna a pessoa do ID"),
         @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
         @ApiResponse(responseCode = "403", description =  "Usuario não autenticado"),
         
@@ -68,7 +67,7 @@ public class PessoaController {
 
     }
 
-    @Operation(summary = "Criar uma nova pessoa", description = "Cria uma pessoa com nome, CPF, endereço, email e senha")
+    @Operation(summary = "Cadastrar uma nova pessoa", description = "Cria uma pessoa com nome, CPF, endereço, email e senha")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "201", description = "Pessoa criada com sucesso"),
         @ApiResponse(responseCode = "400", description = "Dados inválidos"),
@@ -88,7 +87,7 @@ public class PessoaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaService.createPessoa(pessoaRequestDTO, encryptedSenha));
     }
 
-    @Operation(summary = "Editar uma pessoa", description = "Edita a pessoa do Id fornecido")
+    @Operation(summary = "Editar uma pessoa", description = "Edita a pessoa do ID fornecido")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Pessoa atualizada com sucesso"),
         @ApiResponse(responseCode = "400", description = "Pessoa não encontrada"),
@@ -101,7 +100,7 @@ public class PessoaController {
          return ResponseEntity.status(HttpStatus.OK).body(pessoaService.updatePessoa(idPessoa, pessoaRequestDTO));
     }
 
-    @Operation(summary = "Deletar uma pessoa", description = "Deleta a pessoa do Id fornecido")
+    @Operation(summary = "Deletar uma pessoa", description = "Deleta a pessoa do ID fornecido")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Pessoa deletada com sucesso"),
         @ApiResponse(responseCode = "400", description = "Pessoa não encontrado"),

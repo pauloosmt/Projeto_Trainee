@@ -18,14 +18,26 @@ import com.br.emakers.apiProjeto.data.dto.request.EmprestimoRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.EmprestimoResponseDTO;
 import com.br.emakers.apiProjeto.service.EmprestimoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/emprestimos")
-
+@Tag(name = "Empréstimos", description = "Operações relacionadas aos empréstimos")
 public class EmprestimoController {
     @Autowired
     private EmprestimoService emprestimoService;
 
 
+    @Operation(summary = "Solicitar um empréstimo", description = "Cria um empréstimo para o usuário pelo nome do livro")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "Empréstimo criado"),
+        @ApiResponse(responseCode = "400", description = "Usuário não encontrado"),
+        @ApiResponse(responseCode = "403", description =  "Usuario não autenticado"),
+        
+    })
     @PostMapping("/create")
     
     public ResponseEntity<?> criarEmprestimos(@RequestBody EmprestimoRequestDTO emprestimoRequestDTO) {
