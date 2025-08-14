@@ -30,5 +30,16 @@ public record PessoaRequestDTO(
     @Size(min = 6, message = "Senha deve ter no mínimo 6 caracteres")
     String senha
 ) {
+     public PessoaRequestDTO {
+        // remove tudo que não é número do CPF
+        if (cpf != null) {
+            cpf = cpf.replaceAll("\\D", "");
+        }
+        
+        if(cep != null) {
+            cep = cep.replaceAll("\\D", "");
+        }
+    }
+
 
 }

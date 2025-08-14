@@ -62,7 +62,7 @@ public class GeneralExceptionHadler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<RestErrorMensagem> handleEmailjaUtilizado(DataIntegrityViolationException ex) {
-        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.BAD_REQUEST, "O email já está cadastrado!");
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.CONFLICT, "O email já está cadastrado!");
         return ResponseEntity.status(error.status()).body(error);
     }
 
