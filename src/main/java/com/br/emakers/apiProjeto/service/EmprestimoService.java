@@ -10,6 +10,7 @@ import com.br.emakers.apiProjeto.data.entity.Livro;
 import com.br.emakers.apiProjeto.data.entity.Pessoa;
 import com.br.emakers.apiProjeto.exceptions.entity.EmprestimoDevolvido;
 import com.br.emakers.apiProjeto.exceptions.entity.LivroIndisponivelException;
+import com.br.emakers.apiProjeto.exceptions.entity.LivroNaoEncontrado;
 import com.br.emakers.apiProjeto.exceptions.general.EntidadeNaoEncontrada;
 import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
 import com.br.emakers.apiProjeto.repository.LivroRepository;
@@ -19,6 +20,7 @@ import jakarta.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,8 +37,9 @@ public class EmprestimoService {
 
     public EmprestimoResponseDTO emprestarLivroParaUsuarioLogado(EmprestimoRequestDTO emprestimoRequestDTO,
             String emailUsuario) {
+        
         Livro livro = livroRepository.findByNome(emprestimoRequestDTO.nome_livro())
-                .orElseThrow(() -> new RuntimeException("Livro não encontrado"));
+        .orElseThrow(() -> new LivroNaoEncontrado());
 
         Pessoa pessoa = (Pessoa) pessoaRepository.findByEmail(emailUsuario);
 

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.br.emakers.apiProjeto.exceptions.RestErrorMensagem;
 import com.br.emakers.apiProjeto.exceptions.entity.EmprestimoDevolvido;
 import com.br.emakers.apiProjeto.exceptions.entity.LivroIndisponivelException;
+import com.br.emakers.apiProjeto.exceptions.entity.LivroNaoEncontrado;
 import com.br.emakers.apiProjeto.infra.security.SecurityCustomException;
 
 
@@ -41,8 +42,9 @@ public class GeneralExceptionHadler {
     }
 
     @ExceptionHandler(SecurityCustomException.class)
-    public ResponseEntity<String> handleSecurityException(SecurityCustomException excessao) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(excessao.getMessage());
+    public ResponseEntity<RestErrorMensagem> handleSecurityException(SecurityCustomException excessao) {
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.CONFLICT, "Token inválido ou expirado!");
+        return ResponseEntity.status(error.status()).body(error);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -62,7 +64,7 @@ public class GeneralExceptionHadler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<RestErrorMensagem> handleEmailjaUtilizado(DataIntegrityViolationException ex) {
-        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.CONFLICT, "O email já está cadastrado!");
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.CONFLICT, "Usuário ou Livro já está cadastrado!");
         return ResponseEntity.status(error.status()).body(error);
     }
 
@@ -75,6 +77,12 @@ public class GeneralExceptionHadler {
     @ExceptionHandler(EmprestimoDevolvido.class)
     public ResponseEntity<RestErrorMensagem> handleEmprestimoDevolvido(EmprestimoDevolvido excessao) {
         RestErrorMensagem error = new RestErrorMensagem(HttpStatus.CONFLICT, excessao.getMessage());
+        return ResponseEntity.status(error.status()).body(error);
+    }
+
+    @ExceptionHandler(LivroNaoEncontrado.class)
+    public ResponseEntity<RestErrorMensagem> handleLivroNaoEncontrado(LivroNaoEncontrado excessao) {
+        RestErrorMensagem error = new RestErrorMensagem(HttpStatus.NOT_FOUND, excessao.getMessage());
         return ResponseEntity.status(error.status()).body(error);
     }
 

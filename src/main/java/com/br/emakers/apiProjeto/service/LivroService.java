@@ -13,7 +13,10 @@ import com.br.emakers.apiProjeto.data.entity.Livro;
 import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
 import com.br.emakers.apiProjeto.repository.LivroRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class LivroService {
 
     @Autowired

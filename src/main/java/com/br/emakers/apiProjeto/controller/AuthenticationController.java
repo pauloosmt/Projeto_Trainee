@@ -1,6 +1,9 @@
 package com.br.emakers.apiProjeto.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,8 +18,10 @@ import com.br.emakers.apiProjeto.data.dto.request.AuthenticationDTO;
 import com.br.emakers.apiProjeto.data.dto.request.PessoaRequestDTO;
 import com.br.emakers.apiProjeto.data.dto.response.AuthenticationResponseDTO;
 import com.br.emakers.apiProjeto.data.entity.Pessoa;
+
 import com.br.emakers.apiProjeto.infra.security.TokenService;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
+import com.br.emakers.apiProjeto.service.PessoaService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,6 +33,10 @@ import jakarta.validation.Valid;
 @RequestMapping("/auth")
 @Tag(name = "Autenticação", description = "Página de autenticação e registro de usuários")
 public class AuthenticationController {
+
+    @Autowired
+    private PessoaService pessoaService;
+
 
     @Autowired
     private TokenService tokenService;
@@ -56,20 +65,19 @@ public class AuthenticationController {
 
     @Operation(summary = "Registrar" , description = "Registrar uma nova pessoa")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuário cadastrado com sucesso"),
+        @ApiResponse(responseCode = "201", description = "Usuário cadastrado com sucesso"),
         @ApiResponse(responseCode = "400", description = "Dados Inválidos")
     })
     @PostMapping("/register")
     public ResponseEntity registro(@RequestBody @Valid PessoaRequestDTO pessoaRequestDTO) {
         if(this.pessoaRepository.findByEmail(pessoaRequestDTO.email()) != null) {
-            return ResponseEntity.badRequest().build(); 
+            throw new DataIntegrityViolationException("Email já utilizado");
         }
 
         String encryptedSenha = new BCryptPasswordEncoder().encode(pessoaRequestDTO.senha());
-        Pessoa pessoa = new Pessoa(pessoaRequestDTO, encryptedSenha);
-        pessoaRepository.save(pessoa);
+        
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(pessoaService.createPessoa(pessoaRequestDTO, encryptedSenha));
     }
 
     

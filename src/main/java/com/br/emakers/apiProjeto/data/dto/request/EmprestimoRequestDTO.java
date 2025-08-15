@@ -4,9 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record EmprestimoRequestDTO(
 
-    @NotBlank(message = "O nome da pessoa é obrigatório")
-    String nome_pessoa,
-
     @NotBlank(message = "O nome do livro é obrigatório")
     String nome_livro
 

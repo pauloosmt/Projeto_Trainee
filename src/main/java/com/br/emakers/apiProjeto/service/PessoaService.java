@@ -15,12 +15,14 @@ import com.br.emakers.apiProjeto.feign.PessoaFeign;
 import com.br.emakers.apiProjeto.repository.EmprestimoRepository;
 import com.br.emakers.apiProjeto.repository.PessoaRepository;
 
+import jakarta.transaction.Transactional;
 
 import com.br.emakers.apiProjeto.exceptions.general.EntidadeNaoEncontrada;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class PessoaService {
 
     @Autowired
@@ -69,28 +71,36 @@ public class PessoaService {
 
     public PessoaResponseDTO updatePessoa(Long idPessoa, PessoaRequestDTO pessoaRequestDTO) {
         Pessoa pessoa = getPessoaEntityById(idPessoa);
-        if(pessoaRequestDTO.nome() != null) {
+        if(pessoaRequestDTO.nome() != null && !pessoaRequestDTO.nome().isBlank()) {
             pessoa.setNome(pessoaRequestDTO.nome());
         }
         
-        if(pessoaRequestDTO.cep() != null) {
+        if(pessoaRequestDTO.cep() != null && !pessoaRequestDTO.cep().isBlank()) {
             PessoaResponseDTO endereco = pessoaFeign.buscaEnderecoCEP(pessoaRequestDTO.cep());
-            pessoa.setCep(pessoaRequestDTO.cep());
-            pessoa.setLogradouro(endereco.logradouro());
-            pessoa.setBairro(endereco.bairro());
-            pessoa.setLocalidade(endereco.localidade());
-            pessoa.setUf(endereco.uf());
+
+           if (endereco != null) {  
+                pessoa.setCep(pessoaRequestDTO.cep());
+                pessoa.setLogradouro(endereco.logradouro());
+                pessoa.setBairro(endereco.bairro());
+                pessoa.setLocalidade(endereco.localidade());
+                pessoa.setUf(endereco.uf());
+            }
         }
 
-        if(pessoaRequestDTO.cpf() != null) {
-            pessoa.setCpf(pessoaRequestDTO.cpf());
+        if(pessoaRequestDTO.cpf() != null && !pessoaRequestDTO.cpf().isBlank()) {
+           if (pessoaRequestDTO.cpf().matches("\\d{11}")) {
+                pessoa.setCpf(pessoaRequestDTO.cpf());
+            }
         }
 
-        if(pessoaRequestDTO.email() != null) {
-            pessoa.setEmail(pessoaRequestDTO.email());
+        if(pessoaRequestDTO.email() != null && !pessoaRequestDTO.email().isBlank()) {
+           // Validação simples de email
+            if (pessoaRequestDTO.email().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+                pessoa.setEmail(pessoaRequestDTO.email());
+            }
         }
 
-        if(pessoaRequestDTO.senha() != null) {
+        if(pessoaRequestDTO.senha() != null && !pessoaRequestDTO.senha().isBlank()) {
             String encryptedSenha = new BCryptPasswordEncoder().encode(pessoaRequestDTO.senha());
             pessoa.setSenha(encryptedSenha);
         }

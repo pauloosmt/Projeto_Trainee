@@ -33,7 +33,7 @@ public class Pessoa implements UserDetails {
     @Column(name = "nome", nullable = false, length = 100)
     private String nome;
 
-    @Column (name = "cpf", nullable = false, length = 11, unique = true)
+    @Column (name = "cpf", nullable = false, length = 11)
     private String cpf;
 
     @Column(name = "cep", nullable = false, length = 9)
@@ -60,7 +60,7 @@ public class Pessoa implements UserDetails {
         this.senha = senha;
     }
     
-
+    
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
@@ -77,24 +77,24 @@ public class Pessoa implements UserDetails {
     }
 
     @Override
-public boolean isEnabled() {
+    public boolean isEnabled() {
     return true; 
-}
+    }
 
-@Override
-public boolean isCredentialsNonExpired() {
-    return true; 
-}
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true; 
+    }
 
-@Override
-public boolean isAccountNonExpired() {
-    return true; 
-}
+    @Override
+    public boolean isAccountNonExpired() {
+        return true; 
+    }
 
-@Override
-public boolean isAccountNonLocked() {
-    return true; 
-}
+    @Override
+    public boolean isAccountNonLocked() {
+        return true; 
+    }
 
 
 }

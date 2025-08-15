@@ -3,6 +3,7 @@ package com.br.emakers.apiProjeto.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -79,12 +80,12 @@ public class PessoaController {
     public ResponseEntity<PessoaResponseDTO> createPessoa(@Valid @RequestBody PessoaRequestDTO pessoaRequestDTO) { //RequestBody serve para informar que o parametro foi informado no corpo da requisição
         
         if(this.pessoaRepository.findByEmail(pessoaRequestDTO.email()) != null) {
-            return ResponseEntity.badRequest().build(); 
+            throw new DataIntegrityViolationException("Email já cadastrado");
         }
 
         String encryptedSenha = new BCryptPasswordEncoder().encode(pessoaRequestDTO.senha());
-        
         return ResponseEntity.status(HttpStatus.CREATED).body(pessoaService.createPessoa(pessoaRequestDTO, encryptedSenha));
+        
     }
 
     @Operation(summary = "Editar uma pessoa", description = "Edita a pessoa do ID fornecido")
