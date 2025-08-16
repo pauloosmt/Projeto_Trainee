@@ -54,7 +54,7 @@ api.security.token.secret=seu-segredo-jwt
 ## Swagger
 server.port=8080
 springdoc.swagger-ui.path=/swagger-ui.html
-
+```
 # 📖 Endpoints da API  
 
 ### 👤 Pessoas  
