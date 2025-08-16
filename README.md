@@ -104,7 +104,7 @@ Resposta do login:
 {
   "token": "seu_token_jwt_aqui"
 }
-
+```
 ## 🚀 Tecnologias Utilizadas  
 
 - Java 17  
